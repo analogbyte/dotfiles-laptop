@@ -1,0 +1,226 @@
+set $mod Mod4
+
+##################################
+# visual
+font pango:Ubuntu Mono 10
+hide_edge_borders both
+
+client.focused #268bd2 #268bd2 #fdf6e3 #2e9ef4
+client.focused_inactive #2d2d2d #2d2d2d #fdf6e3 #292d2e
+client.unfocused #2d2d2d #2d2d2d #fdf6e3 #292d2e
+client.urgent #859900 #859900 #fdf6e3 #2e9ef4
+
+##################################
+# bar
+bindsym $mod+n bar mode toggle
+bar {
+    output LVDS-0
+    status_command python ~/.i3/i3status.py
+    position top
+    colors {
+        background #073642
+        statusline #eee8d5
+        focused_workspace #cb4b16 #cb4b16 #eee8d5
+        active_workspace #cb4b16 #cb4b16 #eee8d5
+        inactive_workspace #b58900 #b58900 #eee8d5
+        urgent_workspace #859900 #859900 #eee8d5
+    }
+}
+bar {
+    output VGA-0
+    output DP-0
+    output DP-1
+    output DP-2
+    position top
+    tray_output none
+    colors {
+        background #073642
+        statusline #eee8d5
+        focused_workspace #cb4b16 #cb4b16 #eee8d5
+        active_workspace #cb4b16 #cb4b16 #eee8d5
+        inactive_workspace #b58900 #b58900 #eee8d5
+        urgent_workspace #859900 #859900 #eee8d5
+    }
+}
+
+##################################
+# scratchpad
+bindsym $mod+Shift+minus move scratchpad
+bindsym $mod+minus scratchpad show
+bindsym Pause scratchpad show
+
+bindsym $mod+i exec urxvt -title 'scratchpad' -e 'ipython'
+exec urxvt -title 'scratchpad' -e 'ipython'
+for_window [title="^scratchpad$"] move scratchpad
+
+##################################
+# execution
+#exec --no-startup-id xautolock -time 20 -locker i3lock -c 073642 -e -d
+
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+r restart
+# bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'gnome-session-quit --logout --no-prompt'"
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+
+bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Shift+Return exec TMUX=1 i3-sensible-terminal
+
+bindsym $mod+d exec --no-startup-id dmenu_run
+bindsym $mod+o exec --no-startup-id python ~/.i3/i3swap.py
+
+bindsym Ctrl+Mod1+l exec --no-startup-id sleep 0.5 && i3lock -c 073642 -e -d
+
+bindsym XF86AudioMute exec --no-startup-id "pactl set-sink-mute alsa_output.pci-0000_00_1b.0.analog-stereo toggle && killall -USR1 i3status"
+bindsym XF86AudioRaiseVolume exec --no-startup-id "pactl set-sink-volume alsa_output.pci-0000_00_1b.0.analog-stereo +5% && killall -USR1 i3status"
+bindsym XF86AudioLowerVolume exec --no-startup-id "pactl set-sink-volume alsa_output.pci-0000_00_1b.0.analog-stereo -5% && killall -USR1 i3status"
+bindsym XF86AudioNext exec --no-startup-id "mpc next && killall -USR1 i3status"
+bindsym XF86AudioPrev exec --no-startup-id "mpc prev && killall -USR1 i3status"
+bindsym XF86AudioStop exec --no-startup-id "mpc stop && killall -USR1 i3status"
+bindsym XF86AudioPlay exec --no-startup-id "mpc toggle && killall -USR1 i3status"
+
+##################################
+# windows
+bindsym $mod+c kill
+bindsym --whole-window $mod+button2 kill
+
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+bindsym $mod+b split h
+bindsym $mod+v split v
+
+bindsym $mod+f fullscreen toggle
+
+bindsym $mod+Shift+space floating toggle
+floating_modifier $mod
+
+floating_minimum_size 75 x 50
+floating_maximum_size 1600 x 900
+
+bindsym $mod+space focus mode_toggle
+
+##################################
+# workspaces
+bindsym Ctrl+Mod1+j workspace prev
+bindsym Ctrl+Mod1+k workspace next
+
+set $workspace1 "1: web"
+set $workspace2 "2: mail"
+set $workspace3 "3: file"
+set $workspace4 "4: vm"
+set $workspace5 "5: other"
+set $workspace6 "6: other"
+set $workspace7 "7: other"
+set $workspace8 "8: other"
+set $workspace9 "9: other"
+set $workspace0 "10: shell"
+
+workspace $workspace1 output LVDS-0
+workspace $workspace2 output LVDS-0
+workspace $workspace3 output LVDS-0
+workspace $workspace4 output LVDS-0
+workspace $workspace5 output LVDS-0
+workspace $workspace6 output DP-2
+workspace $workspace7 output DP-2
+workspace $workspace8 output DP-2
+workspace $workspace9 output DP-2
+workspace $workspace0 output DP-2
+
+bindsym $mod+1 workspace $workspace1
+bindsym $mod+2 workspace $workspace2
+bindsym $mod+3 workspace $workspace3
+bindsym $mod+4 workspace $workspace4
+bindsym $mod+5 workspace $workspace5
+bindsym $mod+6 workspace $workspace6
+bindsym $mod+7 workspace $workspace7
+bindsym $mod+8 workspace $workspace8
+bindsym $mod+9 workspace $workspace9
+bindsym $mod+0 workspace $workspace0
+
+bindsym $mod+Shift+1 move container to workspace $workspace1
+bindsym $mod+Shift+2 move container to workspace $workspace2
+bindsym $mod+Shift+3 move container to workspace $workspace3
+bindsym $mod+Shift+4 move container to workspace $workspace4
+bindsym $mod+Shift+5 move container to workspace $workspace5
+bindsym $mod+Shift+6 move container to workspace $workspace6
+bindsym $mod+Shift+7 move container to workspace $workspace7
+bindsym $mod+Shift+8 move container to workspace $workspace8
+bindsym $mod+Shift+9 move container to workspace $workspace9
+bindsym $mod+Shift+0 move container to workspace $workspace0
+
+assign [class="^Firefox$"] $workspace1
+assign [class="^Thunderbird$"] $workspace2
+assign [class="^Thunar$"] $workspace3
+assign [class="^Virt-manager$"] $workspace4
+assign [class="^URxvt$"] $workspace0
+
+##################################
+# screens
+bindsym $mod+Mod1+j move workspace to output down
+bindsym $mod+Mod1+k move workspace to output up
+bindsym $mod+Mod1+l move workspace to output right
+bindsym $mod+Mod1+h move workspace to output left
+
+##################################
+# command modes
+mode "resize" {
+    bindsym h resize shrink width 10 px or 10 ppt
+    bindsym j resize grow height 10 px or 10 ppt
+    bindsym k resize shrink height 10 px or 10 ppt
+    bindsym l resize grow width 10 px or 10 ppt
+    bindsym Left resize shrink width 10 px or 10 ppt
+    bindsym Down resize grow height 10 px or 10 ppt
+    bindsym Up resize shrink height 10 px or 10 ppt
+    bindsym Right resize grow width 10 px or 10 ppt
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+bindsym $mod+r mode "resize"
+
+mode "move" {
+    bindsym h move left
+    bindsym j move down
+    bindsym k move up
+    bindsym l move right
+    bindsym Left move left
+    bindsym Down move down
+    bindsym Up move up
+    bindsym Right move right
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+m mode "move" focus floating
+
+mode "launch" {
+    bindsym f mode "default" exec firefox
+    bindsym t mode "default" exec thunderbird
+    bindsym n mode "default" exec thunar
+    bindsym t mode "default" exec urxvt
+    bindsym v mode "default" exec virt-manager
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+p mode "launch"
