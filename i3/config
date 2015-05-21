@@ -14,7 +14,7 @@ client.urgent #859900 #859900 #fdf6e3 #2e9ef4
 # bar
 bindsym $mod+n bar mode toggle
 bar {
-    output LVDS-0
+    output eDP1
     status_command python ~/.i3/i3status.py
     position top
     colors {
@@ -27,10 +27,12 @@ bar {
     }
 }
 bar {
-    output VGA-0
-    output DP-0
-    output DP-1
-    output DP-2
+    output VGA1
+    output DP1
+    output DP2
+    output DP2-1
+    output DP2-2
+    output DP2-3
     position top
     tray_output none
     colors {
@@ -47,7 +49,8 @@ bar {
 # scratchpad
 bindsym $mod+Shift+minus move scratchpad
 bindsym $mod+minus scratchpad show
-bindsym Pause scratchpad show
+bindsym XF86Calculator scratchpad show
+bindsym XF86Homepage scratchpad show
 
 bindsym $mod+i exec urxvt -title 'scratchpad' -e 'ipython'
 exec urxvt -title 'scratchpad' -e 'ipython'
@@ -77,6 +80,10 @@ bindsym XF86AudioNext exec --no-startup-id "mpc next && killall -USR1 i3status"
 bindsym XF86AudioPrev exec --no-startup-id "mpc prev && killall -USR1 i3status"
 bindsym XF86AudioStop exec --no-startup-id "mpc stop && killall -USR1 i3status"
 bindsym XF86AudioPlay exec --no-startup-id "mpc toggle && killall -USR1 i3status"
+
+bindsym XF86MonBrightnessUp exec --no-startup-id "xbacklight -inc 10"
+bindsym XF86MonBrightnessDown exec --no-startup-id "xbacklight -dec 10"
+
 
 ##################################
 # windows
@@ -134,16 +141,16 @@ set $workspace8 "8: other"
 set $workspace9 "9: other"
 set $workspace0 "10: shell"
 
-workspace $workspace1 output LVDS-0
-workspace $workspace2 output LVDS-0
-workspace $workspace3 output LVDS-0
-workspace $workspace4 output LVDS-0
-workspace $workspace5 output LVDS-0
-workspace $workspace6 output DP-2
-workspace $workspace7 output DP-2
-workspace $workspace8 output DP-2
-workspace $workspace9 output DP-2
-workspace $workspace0 output DP-2
+workspace $workspace1 output eDP1
+workspace $workspace2 output eDP1
+workspace $workspace3 output eDP1
+workspace $workspace4 output eDP1
+workspace $workspace5 output eDP1
+workspace $workspace6 output DP2-2
+workspace $workspace7 output DP2-2
+workspace $workspace8 output DP2-2
+workspace $workspace9 output DP2-2
+workspace $workspace0 output DP2-2
 
 bindsym $mod+1 workspace $workspace1
 bindsym $mod+2 workspace $workspace2
