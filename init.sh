@@ -2,9 +2,6 @@
 src_dir="`dirname \"$0\"`"              # relative path
 src_dir="`( cd \"$src_dir\" && pwd )`"  # absolutized and normalized path
 
-# link all my stuff
-for file in `ls $src_dir`; do
-    if [[ $file != "README.md" && $file != "init.sh" ]]; then
-        ln -snf $src_dir/$file ~/.$file
-    fi
-done
+ln -snf $src_dir/i3 ~/.i3
+ln -snf $src_dir/dunstrc ~/.config/dunstrc
+ln -snf $src_dir/Xdefaults ~/.Xdefaults
