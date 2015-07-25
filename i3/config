@@ -12,10 +12,11 @@ client.urgent #859900 #859900 #fdf6e3 #2e9ef4
 
 ##################################
 # bar
-bindsym $mod+n bar mode toggle
+bindsym $mod+period bar mode toggle
 bar {
     output eDP1
-    status_command python ~/.i3/i3status.py
+    status_command SCRIPT_DIR=/usr/libexec/i3blocks i3blocks -c ~/.i3/i3blocks.conf
+#python ~/.i3/i3status.py
     position top
     colors {
         background #073642
@@ -50,39 +51,52 @@ bar {
 bindsym $mod+Shift+minus move scratchpad
 bindsym $mod+minus scratchpad show
 bindsym XF86Calculator scratchpad show
-bindsym XF86Homepage scratchpad show
 
-bindsym $mod+i exec urxvt -title 'scratchpad' -e 'ipython'
 exec urxvt -title 'scratchpad' -e 'ipython'
 for_window [title="^scratchpad$"] move scratchpad
 
 ##################################
 # execution
-#exec --no-startup-id xautolock -time 20 -locker i3lock -c 073642 -e -d
+#exec --no-startup-id xautolock -time 20 -locker i3lock -c 073642 -d
+
+exec --no-startup-id dunst
 
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 # bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'gnome-session-quit --logout --no-prompt'"
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
-bindsym $mod+Return exec i3-sensible-terminal
-bindsym $mod+Shift+Return exec TMUX=1 i3-sensible-terminal
+bindsym $mod+Return exec urxvt
 
-bindsym $mod+d exec --no-startup-id dmenu_run
-bindsym $mod+o exec --no-startup-id python ~/.i3/i3swap.py
+bindsym $mod+d exec --no-startup-id "rofi -modi run,window -show run"
+bindsym XF86Search exec --no-startup-id "rofi -modi window,run -show window"
+bindsym XF86LaunchA exec --no-startup-id "rofi -modi ssh -show ssh"
+bindsym $mod+i exec --no-startup-id "rofi-pass"
+#bindsym $mod+n clear notifications (see dunstrc)
 
-bindsym Ctrl+Mod1+l exec --no-startup-id sleep 0.5 && i3lock -c 073642 -e -d
+bindsym $mod+u exec --no-startup-id python ~/dotfiles-laptop/i3/scripts/i3swap.py
 
-bindsym XF86AudioMute exec --no-startup-id "pactl set-sink-mute alsa_output.pci-0000_00_1b.0.analog-stereo toggle && killall -USR1 i3status"
-bindsym XF86AudioRaiseVolume exec --no-startup-id "pactl set-sink-volume alsa_output.pci-0000_00_1b.0.analog-stereo +5% && killall -USR1 i3status"
-bindsym XF86AudioLowerVolume exec --no-startup-id "pactl set-sink-volume alsa_output.pci-0000_00_1b.0.analog-stereo -5% && killall -USR1 i3status"
-bindsym XF86AudioNext exec --no-startup-id "mpc next && killall -USR1 i3status"
-bindsym XF86AudioPrev exec --no-startup-id "mpc prev && killall -USR1 i3status"
-bindsym XF86AudioStop exec --no-startup-id "mpc stop && killall -USR1 i3status"
-bindsym XF86AudioPlay exec --no-startup-id "mpc toggle && killall -USR1 i3status"
+bindsym Ctrl+Mod1+l exec --no-startup-id sleep 0.5 && i3lock -c 073642 -d
+
+bindsym XF86AudioMute exec --no-startup-id "pactl set-sink-mute alsa_output.pci-0000_00_1b.0.analog-stereo toggle && pkill -RTMIN+1 i3blocks"
+bindsym XF86AudioMicMute exec --no-startup-id "amixer set Capture toggle"
+bindsym XF86AudioRaiseVolume exec --no-startup-id "pactl set-sink-volume alsa_output.pci-0000_00_1b.0.analog-stereo +5% && pkill -RTMIN+1 i3blocks"
+bindsym XF86AudioLowerVolume exec --no-startup-id "pactl set-sink-volume alsa_output.pci-0000_00_1b.0.analog-stereo -5% && pkill -RTMIN+1 i3blocks"
+bindsym $mod+e exec --no-startup-id "mpc next && pkill -SIGRTMIN+2 i3blocks"
+#bindsym XF86AudioPrev exec --no-startup-id "mpc prev && pkill -RTMIN+2 i3blocks"
+#bindsym XF86AudioStop exec --no-startup-id "mpc stop && pkill -RTMIN+2 i3blocks"
+bindsym XF86HomePage exec --no-startup-id "mpc toggle && pkill -SIGRTMIN+2 i3blocks"
+
+bindsym --release Caps_Lock exec --no-startup-id pkill -SIGRTMIN+3 i3blocks
+bindsym --release Num_Lock  exec --no-startup-id pkill -SIGRTMIN+3 i3blocks
+
+bindsym XF86Tools exec --no-startup-id "xfce4-settings-manager"
+bindsym XF86Display exec --no-startup-id "xfce4-display-settings"
 
 bindsym XF86MonBrightnessUp exec --no-startup-id "xbacklight -inc 10"
 bindsym XF86MonBrightnessDown exec --no-startup-id "xbacklight -dec 10"
+
+bindsym XF86Explorer exec --no-startup-id xfce4-appfinder
 
 
 ##################################
@@ -94,23 +108,29 @@ bindsym $mod+h focus left
 bindsym $mod+j focus down
 bindsym $mod+k focus up
 bindsym $mod+l focus right
+
+# conflicting with numpad?? why?
 bindsym $mod+Left focus left
 bindsym $mod+Down focus down
 bindsym $mod+Up focus up
 bindsym $mod+Right focus right
 
+bindsym $mod+o focus parent
+
 bindsym $mod+Shift+h move left
 bindsym $mod+Shift+j move down
 bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
+
 bindsym $mod+Shift+Left move left
 bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Up move up
-bindsym $mod+Shift+Right move right
+bindsym $mod+Shift+Righ move right
 
+bindsym $mod+t layout toggle all
 bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
-bindsym $mod+e layout toggle split
+bindsym $mod+a layout toggle split
 
 bindsym $mod+b split h
 bindsym $mod+v split v
@@ -121,7 +141,7 @@ bindsym $mod+Shift+space floating toggle
 floating_modifier $mod
 
 floating_minimum_size 75 x 50
-floating_maximum_size 1600 x 900
+floating_maximum_size 1900 x 1080
 
 bindsym $mod+space focus mode_toggle
 
@@ -131,15 +151,21 @@ bindsym Ctrl+Mod1+j workspace prev
 bindsym Ctrl+Mod1+k workspace next
 
 set $workspace1 "1: web"
-set $workspace2 "2: mail"
-set $workspace3 "3: file"
-set $workspace4 "4: vm"
+set $workspace2 "2: im"
+set $workspace3 "3: mail"
+set $workspace4 "4: file"
 set $workspace5 "5: other"
 set $workspace6 "6: other"
 set $workspace7 "7: other"
 set $workspace8 "8: other"
 set $workspace9 "9: other"
 set $workspace0 "10: shell"
+set $workspace11 "11"
+set $workspace12 "12"
+set $workspace13 "13"
+set $workspace14 "14"
+set $workspace15 "15"
+set $workspace16 "16"
 
 workspace $workspace1 output eDP1
 workspace $workspace2 output eDP1
@@ -151,6 +177,12 @@ workspace $workspace7 output DP2-2
 workspace $workspace8 output DP2-2
 workspace $workspace9 output DP2-2
 workspace $workspace0 output DP2-2
+workspace $workspace11 output DP2-2
+workspace $workspace12 output DP2-2
+workspace $workspace13 output DP2-2
+workspace $workspace14 output DP2-2
+workspace $workspace15 output DP2-2
+workspace $workspace16 output DP2-2
 
 bindsym $mod+1 workspace $workspace1
 bindsym $mod+2 workspace $workspace2
@@ -162,6 +194,30 @@ bindsym $mod+7 workspace $workspace7
 bindsym $mod+8 workspace $workspace8
 bindsym $mod+9 workspace $workspace9
 bindsym $mod+0 workspace $workspace0
+bindsym $mod+Control+0 workspace $workspace0
+bindsym $mod+Control+1 workspace $workspace11
+bindsym $mod+Control+2 workspace $workspace12
+bindsym $mod+Control+3 workspace $workspace13
+bindsym $mod+Control+4 workspace $workspace14
+bindsym $mod+Control+5 workspace $workspace15
+bindsym $mod+Control+6 workspace $workspace16
+
+bindsym $mod+KP_1 workspace $workspace1
+bindsym $mod+KP_2 workspace $workspace2
+bindsym $mod+KP_3 workspace $workspace3
+bindsym $mod+KP_4 workspace $workspace4
+bindsym $mod+KP_5 workspace $workspace5
+bindsym $mod+KP_6 workspace $workspace6
+bindsym $mod+KP_7 workspace $workspace7
+bindsym $mod+KP_8 workspace $workspace8
+bindsym $mod+KP_9 workspace $workspace9
+bindsym $mod+KP_0 workspace $workspace0
+bindsym $mod+KP_Divide workspace $workspace11
+bindsym $mod+KP_Multiply workspace $workspace12
+bindsym $mod+KP_Subtract workspace $workspace13
+bindsym $mod+KP_Add workspace $workspace14
+bindsym $mod+KP_Enter workspace $workspace15
+bindsym $mod+KP_Decimal workspace $workspace16
 
 bindsym $mod+Shift+1 move container to workspace $workspace1
 bindsym $mod+Shift+2 move container to workspace $workspace2
@@ -173,19 +229,46 @@ bindsym $mod+Shift+7 move container to workspace $workspace7
 bindsym $mod+Shift+8 move container to workspace $workspace8
 bindsym $mod+Shift+9 move container to workspace $workspace9
 bindsym $mod+Shift+0 move container to workspace $workspace0
+bindsym $mod+Shift+Control+1 move container to workspace $workspace11
+bindsym $mod+Shift+Control+2 move container to workspace $workspace12
+bindsym $mod+Shift+Control+3 move container to workspace $workspace13
+bindsym $mod+Shift+Control+4 move container to workspace $workspace14
+bindsym $mod+Shift+Control+5 move container to workspace $workspace15
+bindsym $mod+Shift+Control+6 move container to workspace $workspace16
+
+bindsym $mod+Shift+KP_1 move container to workspace $workspace1
+bindsym $mod+Shift+KP_2 move container to workspace $workspace2
+bindsym $mod+Shift+KP_3 move container to workspace $workspace3
+bindsym $mod+Shift+KP_4 move container to workspace $workspace4
+bindsym $mod+Shift+KP_5 move container to workspace $workspace5
+bindsym $mod+Shift+KP_6 move container to workspace $workspace6
+bindsym $mod+Shift+KP_7 move container to workspace $workspace7
+bindsym $mod+Shift+KP_8 move container to workspace $workspace8
+bindsym $mod+Shift+KP_9 move container to workspace $workspace9
+bindsym $mod+Shift+KP_0 move container to workspace $workspace0
+bindsym $mod+Shift+KP_Divide move container to workspace $workspace11
+bindsym $mod+Shift+KP_Multiply move container to workspace $workspace12
+bindsym $mod+Shift+KP_Subtract move container to workspace $workspace13
+bindsym $mod+Shift+KP_Add move container to workspace $workspace14
+bindsym $mod+Shift+KP_Enter move container to workspace $workspace15
+bindsym $mod+Shift+KP_Decimal move container to workspace $workspace16
 
 assign [class="^Firefox$"] $workspace1
-assign [class="^Thunderbird$"] $workspace2
-assign [class="^Thunar$"] $workspace3
-assign [class="^Virt-manager$"] $workspace4
-assign [class="^URxvt$"] $workspace0
+assign [class="^Gajim$"] $workspace2
+assign [class="^Thunderbird$"] $workspace3
+assign [class="^Thunar$"] $workspace4
+# assign [class="^URxvt$"] $workspace0
 
 ##################################
 # screens
+bindsym $mod+Mod1+h move workspace to output left
 bindsym $mod+Mod1+j move workspace to output down
 bindsym $mod+Mod1+k move workspace to output up
 bindsym $mod+Mod1+l move workspace to output right
-bindsym $mod+Mod1+h move workspace to output left
+bindsym $mod+Mod1+Left move workspace to output left
+bindsym $mod+Mod1+Down move workspace to output down
+bindsym $mod+Mod1+Up move workspace to output up
+bindsym $mod+Mod1+Right move workspace to output right
 
 ##################################
 # command modes
@@ -198,6 +281,15 @@ mode "resize" {
     bindsym Down resize grow height 10 px or 10 ppt
     bindsym Up resize shrink height 10 px or 10 ppt
     bindsym Right resize grow width 10 px or 10 ppt
+
+    bindsym Shift+h resize shrink width 1 px or 1 ppt
+    bindsym Shift+j resize grow height 1 px or 1 ppt
+    bindsym Shift+k resize shrink height 1 px or 1 ppt
+    bindsym Shift+l resize grow width 1 px or 1 ppt
+    bindsym Shift+Left resize shrink width 1 px or 1 ppt
+    bindsym Shift+Down resize grow height 1 px or 1 ppt
+    bindsym Shift+Up resize shrink height 1 px or 1 ppt
+    bindsym Shift+Right resize grow width 1 px or 1 ppt
 
     bindsym Return mode "default"
     bindsym Escape mode "default"
@@ -222,10 +314,13 @@ bindsym $mod+m mode "move" focus floating
 
 mode "launch" {
     bindsym f mode "default" exec firefox
+    bindsym i mode "default" exec gajim
     bindsym t mode "default" exec thunderbird
     bindsym n mode "default" exec thunar
     bindsym t mode "default" exec urxvt
     bindsym v mode "default" exec virt-manager
+    bindsym m mode "default" exec clerk
+    bindsym s mode "default" exec urxvt -title 'scratchpad' -e 'ipython'
 
     bindsym Return mode "default"
     bindsym Escape mode "default"

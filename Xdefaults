@@ -1,87 +1,103 @@
+! URxvt*termName: rxvt-unicode
+!
 ! set colors
-urxvt*background: #000000
-urxvt*foreground: #949494
+URxvt*background: #000000
+URxvt*foreground: #949494
 ! black
-urxvt*color0  : #0f0f0f
-urxvt*color8  : #666666
+URxvt*color0  : #0f0f0f
+URxvt*color8  : #666666
 ! red
-urxvt*color1  : #AA0000
-urxvt*color9  : #EF2929
+URxvt*color1  : #AA0000
+URxvt*color9  : #EF2929
 ! green
-urxvt*color2  : #4E9A06
-urxvt*color10 : #8AE234
+URxvt*color2  : #4E9A06
+URxvt*color10 : #8AE234
 ! yellow
-urxvt*color3  : #C4A000
-urxvt*color11 : #FCE94F
+URxvt*color3  : #C4A000
+URxvt*color11 : #FCE94F
 ! blue
-urxvt*color4  : #3465A4
-urxvt*color12 : #87d7ff
+URxvt*color4  : #3465A4
+URxvt*color12 : #87d7ff
 ! magenta
-urxvt*color5  : #75507B
-urxvt*color13 : #AD7FA8
+URxvt*color5  : #75507B
+URxvt*color13 : #AD7FA8
 ! cyan
-urxvt*color6  : #06cbdb
-urxvt*color14 : #34E2E2
+URxvt*color6  : #06cbdb
+URxvt*color14 : #34E2E2
 ! white
-urxvt*color7  : #949494
-urxvt*color15 : #c4c4c4
+URxvt*color7  : #949494
+URxvt*color15 : #c4c4c4
 
 ! make ctrl-shift work for bindings
-urxvt.iso14755: false
-urxvt.iso14755_52: false
+URxvt.iso14755: false
+URxvt.iso14755_52: false
 
 ! start big
-urxvt*geometry:          800x600
+URxvt*geometry:          800x600
 
 ! fonts
-urxvt*skipBuiltinGlyphs: true
-urxvt*depth:             32
-urxvt*font:              xft:Ubuntu Mono:size=11,style=regular
-urxvt*boldFont:          xft:Ubuntu Mono:size=11,style=bold
-urxvt*buffered:          true
+URxvt*skipBuiltinGlyphs: true
+URxvt*depth:             32
+URxvt*font:              xft:Ubuntu Mono:size=11,style=regular
+URxvt*boldFont:          xft:Ubuntu Mono:size=11,style=bold
+URxvt*buffered:          true
 
 ! show urgency vi
-urxvt*urgentOnBell:      true
+URxvt*urgentOnBell:      true
 
-! tmux does this for us
-urxvt*saveLines:         0
-urxvt*scrollBar:         false
+! scroll behavior
+URxvt*saveLines:         65535
+URxvt*scrollBar:         false
 
 ! home and end keys
-urxvt*keysym.Home:       \033[1~
-urxvt*keysym.End:        \033[4~
+! URxvt*keysym.Home:       \033[1~
+! URxvt*keysym.End:        \033[4~
 
 ! extensions
-urxvt.perl-ext-common: default,matcher
-urxvt.url-launcher: /usr/bin/firefox
-urxvt.matcher.button: 1
-urxvt.underlineURLs: false
+URxvt.perl-ext-common: default,clipboard,url-select,keyboard-select
+URxvt.url-select.launcher: /usr/bin/xdg-open
+URxvt.url-select.underline: false
+URxvt.keysym.M-u: perl:url-select:select_next
+URxvt.keysym.M-Escape: perl:keyboard-select:activate
+URxvt.keysym.M-s: perl:keyboard-select:search
 
-urxvt.keysym.KP_Add:    +
-urxvt.keysym.KP_Subtract: -
-urxvt.keysym.KP_Multiply: *
-urxvt.keysym.KP_Divide: /
-urxvt.keysym.KP_Decimal: .
-urxvt.keysym.KP_Separator: ,
-urxvt.keysym.KP_Enter: \015
-urxvt.keysym.KP_1: 1
-urxvt.keysym.KP_2: 2
-urxvt.keysym.KP_3: 3
-urxvt.keysym.KP_4: 4
-urxvt.keysym.KP_5: 5
-urxvt.keysym.KP_6: 6
-urxvt.keysym.KP_7: 7
-urxvt.keysym.KP_8: 8
-urxvt.keysym.KP_9: 9
-urxvt.keysym.KP_0: 0
-urxvt.keysym.KP_Home: \033[7~
-urxvt.keysym.KP_Up: \033[A
-urxvt.keysym.KP_Prior: \033[5~
-urxvt.keysym.KP_Left: \033[D
-urxvt.keysym.KP_Begin: \007
-urxvt.keysym.KP_Right: \033[C
-urxvt.keysym.KP_End: \033[8~
-urxvt.keysym.KP_Down: \033[B
-urxvt.keysym.KP_Next: \033[6~
-urxvt.keysym.KP_Insert: \033[2~
-urxvt.keysym.KP_Delete: \033[3~
+URxvt.keysym.KP_Add:    +
+URxvt.keysym.KP_Subtract: -
+URxvt.keysym.KP_Multiply: *
+URxvt.keysym.KP_Divide: /
+URxvt.keysym.KP_Decimal: .
+URxvt.keysym.KP_Separator: .
+URxvt.keysym.KP_Enter: \015
+URxvt.keysym.KP_1: 1
+URxvt.keysym.KP_2: 2
+URxvt.keysym.KP_3: 3
+URxvt.keysym.KP_4: 4
+URxvt.keysym.KP_5: 5
+URxvt.keysym.KP_6: 6
+URxvt.keysym.KP_7: 7
+URxvt.keysym.KP_8: 8
+URxvt.keysym.KP_9: 9
+URxvt.keysym.KP_0: 0
+URxvt.keysym.KP_Home: \033[7~
+URxvt.keysym.KP_Up: \033[A
+URxvt.keysym.KP_Prior: \033[5~
+URxvt.keysym.KP_Left: \033[D
+URxvt.keysym.KP_Begin: \007
+URxvt.keysym.KP_Right: \033[C
+URxvt.keysym.KP_End: \033[8~
+URxvt.keysym.KP_Down: \033[B
+URxvt.keysym.KP_Next: \033[6~
+URxvt.keysym.KP_Insert: \033[2~
+URxvt.keysym.KP_Delete: \033[3~
+
+rofi.font: Ubuntu Mono 10
+rofi.location: 6
+rofi.width: 100
+rofi.bw: 0
+rofi.lines: 30
+rofi.terminal: urxvt
+rofi.fg: #eee8d5
+rofi.bg: #073642
+rofi.hlbg-active: #cb4b16
+rofi.hlbg-urgent: #cb4b16
+rofi.hlbg: #cb4b16
