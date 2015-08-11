@@ -2,8 +2,8 @@
 
 volume() {
   mute=`pactl list sinks | grep "Mute: " | cut -d: -f 2 | tr -d [:blank:]`
-  [[ $mute == 'no' ]] && echo `pactl list sinks | grep "Volume: f" | cut -d'/' -f2 | tr -d [:blank:]` && return
-  [[ $mute == 'yes' ]] && echo 'mute'
+  [[ $mute == 'no' ]] && echo  `pactl list sinks | grep "Volume: f" | cut -d'/' -f2 | tr -d [:blank:]` && return
+  [[ $mute == 'yes' ]] && echo ' 0%' && echo && echo '#458588'
 }
 
 case $BLOCK_BUTTON in

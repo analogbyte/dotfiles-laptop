@@ -2,13 +2,34 @@ set $mod Mod4
 
 ##################################
 # visual
-font pango:Ubuntu Mono 10
+font pango:Ubuntu Mono, Icons 10
 hide_edge_borders both
+new_window normal 1
 
-client.focused #268bd2 #268bd2 #fdf6e3 #2e9ef4
-client.focused_inactive #2d2d2d #2d2d2d #fdf6e3 #292d2e
-client.unfocused #2d2d2d #2d2d2d #fdf6e3 #292d2e
-client.urgent #859900 #859900 #fdf6e3 #2e9ef4
+# css style bracket {
+set $background  #1d2021
+set $foreground  #ebdbb2
+set $black       #282828
+set $darkgrey    #928374
+set $darkred     #cc241d
+set $red         #fb4934
+set $darkgreen   #98971a
+set $green       #b8bb26
+set $darkyellow  #d79921
+set $yellow      #fabd2f
+set $darkblue    #458588
+set $blue        #83a598
+set $darkmagenta #b16286
+set $magenta     #d3869b
+set $darkcyan    #689d6a
+set $cyan        #8ec07c
+set $lightgrey   #a89984
+set $white       #ebdbb2
+
+client.focused          $darkblue $darkblue $foreground $cyan
+client.focused_inactive $black $black $foreground $black
+client.unfocused        $black $black $foreground $black
+client.urgent           $red $red $background $red
 
 ##################################
 # bar
@@ -18,12 +39,14 @@ bar {
     status_command SCRIPT_DIR=/usr/libexec/i3blocks i3blocks -c ~/.i3/i3blocks.conf
     position top
     colors {
-        background #073642
-        statusline #eee8d5
-        focused_workspace #cb4b16 #cb4b16 #eee8d5
-        active_workspace #cb4b16 #cb4b16 #eee8d5
-        inactive_workspace #b58900 #b58900 #eee8d5
-        urgent_workspace #859900 #859900 #eee8d5
+        background $background
+        statusline $foreground
+        separator $darkgrey
+
+        focused_workspace  $darkblue $darkblue $foreground
+        active_workspace   $darkblue $darkblue $foreground
+        inactive_workspace $background $background $darkgrey
+        urgent_workspace   $red $red $black
     }
 }
 bar {
@@ -36,12 +59,14 @@ bar {
     position top
     tray_output none
     colors {
-        background #073642
-        statusline #eee8d5
-        focused_workspace #cb4b16 #cb4b16 #eee8d5
-        active_workspace #cb4b16 #cb4b16 #eee8d5
-        inactive_workspace #b58900 #b58900 #eee8d5
-        urgent_workspace #859900 #859900 #eee8d5
+        background $background
+        statusline $foreground
+        separator $darkgrey
+
+        focused_workspace  $darkblue $darkblue $foreground
+        active_workspace   $darkblue $darkblue $foreground
+        inactive_workspace $background $background $darkgrey
+        urgent_workspace   $red $red $black
     }
 }
 
@@ -51,20 +76,27 @@ bindsym $mod+Shift+minus move scratchpad
 bindsym $mod+minus scratchpad show
 bindsym XF86Calculator scratchpad show
 
-exec urxvt -title 'scratchpad' -e 'ipython'
+exec --no-startup-id termite -t 'scratchpad' -e 'ipython'
 for_window [title="^scratchpad$"] move scratchpad
 
 ##################################
 # execution
-#exec --no-startup-id xautolock -time 20 -locker i3lock -c 073642 -d
 
-exec --no-startup-id dunst
+#exec --no-startup-id xautolock -time 20 -locker ~/scripts/lock.sh
 
+exec --no-startup-id 'xrdb -merge ~/.Xresources' # TODO: put in xinitrc?
+exec --no-startup-id 'setxkbmap -option compose:caps -variant altgr-intl us' # TODO, that too?
+exec --no-startup-id '~/scripts/toggle_touchpad.sh'
+exec --no-startup-id 'dunst'
+exec --no-startup-id 'nm-applet'
+
+##################################
+# keybindings
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
-bindsym $mod+Return exec urxvt
+bindsym $mod+Return exec termite
 
 bindsym $mod+d exec --no-startup-id "rofi -modi run,window -show run"
 bindsym XF86Search exec --no-startup-id "rofi -modi window,run -show window"
@@ -74,7 +106,7 @@ bindsym $mod+i exec --no-startup-id "rofi-pass"
 
 bindsym $mod+u exec --no-startup-id python ~/dotfiles-laptop/i3/scripts/i3swap.py
 
-bindsym Ctrl+Mod1+l exec --no-startup-id sleep 0.5 && i3lock -c 073642 -d
+bindsym Ctrl+Mod1+l exec --no-startup-id ~/scripts/lock.sh
 
 bindsym XF86AudioMute exec --no-startup-id "pactl set-sink-mute alsa_output.pci-0000_00_1b.0.analog-stereo toggle && pkill -RTMIN+1 i3blocks"
 bindsym XF86AudioMicMute exec --no-startup-id "amixer set Capture toggle"
@@ -88,19 +120,27 @@ bindsym XF86HomePage exec --no-startup-id "mpc toggle && pkill -SIGRTMIN+2 i3blo
 bindsym --release Caps_Lock exec --no-startup-id pkill -SIGRTMIN+3 i3blocks
 bindsym --release Num_Lock  exec --no-startup-id pkill -SIGRTMIN+3 i3blocks
 
-bindsym XF86Tools exec --no-startup-id "xfce4-settings-manager"
-bindsym XF86Display exec --no-startup-id "xfce4-display-settings"
+bindsym XF86Tools exec --no-startup-id "xfce4-power-manager-settings"
+bindsym XF86Display exec --no-startup-id "~/scripts/displays.sh"
 
 bindsym XF86MonBrightnessUp exec --no-startup-id "xbacklight -inc 10"
 bindsym XF86MonBrightnessDown exec --no-startup-id "xbacklight -dec 10"
 
-bindsym XF86Explorer exec --no-startup-id xfce4-appfinder
-
+bindsym XF86Explorer exec --no-startup-id ~/scripts/toggle_touchpad.sh
 
 ##################################
 # windows
-bindsym $mod+c kill
 bindsym --whole-window $mod+button2 kill
+mode "close? [Y/n]" {
+    bindsym y mode "default" kill
+    bindsym c mode "default" kill
+    bindsym n mode "default"
+
+    bindsym Return mode "default" kill
+    bindsym Escape mode "default"
+}
+bindsym $mod+c mode "close? [Y/n]"
+# bindsym $mod+c kill
 
 bindsym $mod+h focus left
 bindsym $mod+j focus down
@@ -123,7 +163,7 @@ bindsym $mod+Shift+l move right
 bindsym $mod+Shift+Left move left
 bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Up move up
-bindsym $mod+Shift+Righ move right
+bindsym $mod+Shift+Right move right
 
 bindsym $mod+t layout toggle all
 bindsym $mod+s layout stacking
@@ -145,42 +185,44 @@ bindsym $mod+space focus mode_toggle
 
 ##################################
 # workspaces
-bindsym Ctrl+Mod1+j workspace prev
-bindsym Ctrl+Mod1+k workspace next
+workspace_auto_back_and_forth yes
+
+bindsym Ctrl+Mod1+j workspace prev_on_output
+bindsym Ctrl+Mod1+k workspace next_on_output
+bindsym Ctrl+Shift+Mod1+j move container to workspace prev workspace prev
+bindsym Ctrl+Shift+Mod1+k move container to workspace next workspace next
 
 set $workspace1 "1: web"
 set $workspace2 "2: im"
 set $workspace3 "3: mail"
 set $workspace4 "4: file"
-set $workspace5 "5: other"
-set $workspace6 "6: other"
-set $workspace7 "7: other"
-set $workspace8 "8: other"
-set $workspace9 "9: other"
+set $workspace5 "5: remote"
+set $workspace6 "6: shell"
+set $workspace7 "7: misc"
+set $workspace8 "8: misc"
+set $workspace9 "9: misc"
 set $workspace0 "10: shell"
-set $workspace11 "11"
-set $workspace12 "12"
-set $workspace13 "13"
-set $workspace14 "14"
-set $workspace15 "15"
-set $workspace16 "16"
 
 workspace $workspace1 output eDP1
 workspace $workspace2 output eDP1
 workspace $workspace3 output eDP1
 workspace $workspace4 output eDP1
 workspace $workspace5 output eDP1
-workspace $workspace6 output DP2-2
-workspace $workspace7 output DP2-2
-workspace $workspace8 output DP2-2
-workspace $workspace9 output DP2-2
-workspace $workspace0 output DP2-2
-workspace $workspace11 output DP2-2
-workspace $workspace12 output DP2-2
-workspace $workspace13 output DP2-2
-workspace $workspace14 output DP2-2
-workspace $workspace15 output DP2-2
-workspace $workspace16 output DP2-2
+workspace $workspace6 output eDP1
+workspace $workspace7 output eDP1
+workspace $workspace8 output eDP1
+workspace $workspace9 output eDP1
+workspace $workspace0 output eDP1
+workspace "11" output DP2-2
+workspace "12" output DP2-2
+workspace "13" output DP2-2
+workspace "14" output DP2-2
+workspace "15" output DP2-2
+workspace "16" output DP2-2
+workspace "17" output DP2-2
+workspace "18" output DP2-2
+workspace "19" output DP2-2
+workspace "20" output DP2-2
 
 bindsym $mod+1 workspace $workspace1
 bindsym $mod+2 workspace $workspace2
@@ -192,30 +234,16 @@ bindsym $mod+7 workspace $workspace7
 bindsym $mod+8 workspace $workspace8
 bindsym $mod+9 workspace $workspace9
 bindsym $mod+0 workspace $workspace0
-bindsym $mod+Control+0 workspace $workspace0
-bindsym $mod+Control+1 workspace $workspace11
-bindsym $mod+Control+2 workspace $workspace12
-bindsym $mod+Control+3 workspace $workspace13
-bindsym $mod+Control+4 workspace $workspace14
-bindsym $mod+Control+5 workspace $workspace15
-bindsym $mod+Control+6 workspace $workspace16
-
-bindsym $mod+KP_1 workspace $workspace1
-bindsym $mod+KP_2 workspace $workspace2
-bindsym $mod+KP_3 workspace $workspace3
-bindsym $mod+KP_4 workspace $workspace4
-bindsym $mod+KP_5 workspace $workspace5
-bindsym $mod+KP_6 workspace $workspace6
-bindsym $mod+KP_7 workspace $workspace7
-bindsym $mod+KP_8 workspace $workspace8
-bindsym $mod+KP_9 workspace $workspace9
-bindsym $mod+KP_0 workspace $workspace0
-bindsym $mod+KP_Divide workspace $workspace11
-bindsym $mod+KP_Multiply workspace $workspace12
-bindsym $mod+KP_Subtract workspace $workspace13
-bindsym $mod+KP_Add workspace $workspace14
-bindsym $mod+KP_Enter workspace $workspace15
-bindsym $mod+KP_Decimal workspace $workspace16
+bindcode $mod+87 workspace "11"
+bindcode $mod+88 workspace "12"
+bindcode $mod+89 workspace "13"
+bindcode $mod+83 workspace "14"
+bindcode $mod+84 workspace "15"
+bindcode $mod+85 workspace "16"
+bindcode $mod+79 workspace "17"
+bindcode $mod+80 workspace "18"
+bindcode $mod+81 workspace "19"
+bindcode $mod+90 workspace "20"
 
 bindsym $mod+Shift+1 move container to workspace $workspace1
 bindsym $mod+Shift+2 move container to workspace $workspace2
@@ -227,35 +255,24 @@ bindsym $mod+Shift+7 move container to workspace $workspace7
 bindsym $mod+Shift+8 move container to workspace $workspace8
 bindsym $mod+Shift+9 move container to workspace $workspace9
 bindsym $mod+Shift+0 move container to workspace $workspace0
-bindsym $mod+Shift+Control+1 move container to workspace $workspace11
-bindsym $mod+Shift+Control+2 move container to workspace $workspace12
-bindsym $mod+Shift+Control+3 move container to workspace $workspace13
-bindsym $mod+Shift+Control+4 move container to workspace $workspace14
-bindsym $mod+Shift+Control+5 move container to workspace $workspace15
-bindsym $mod+Shift+Control+6 move container to workspace $workspace16
-
-bindsym $mod+Shift+KP_1 move container to workspace $workspace1
-bindsym $mod+Shift+KP_2 move container to workspace $workspace2
-bindsym $mod+Shift+KP_3 move container to workspace $workspace3
-bindsym $mod+Shift+KP_4 move container to workspace $workspace4
-bindsym $mod+Shift+KP_5 move container to workspace $workspace5
-bindsym $mod+Shift+KP_6 move container to workspace $workspace6
-bindsym $mod+Shift+KP_7 move container to workspace $workspace7
-bindsym $mod+Shift+KP_8 move container to workspace $workspace8
-bindsym $mod+Shift+KP_9 move container to workspace $workspace9
-bindsym $mod+Shift+KP_0 move container to workspace $workspace0
-bindsym $mod+Shift+KP_Divide move container to workspace $workspace11
-bindsym $mod+Shift+KP_Multiply move container to workspace $workspace12
-bindsym $mod+Shift+KP_Subtract move container to workspace $workspace13
-bindsym $mod+Shift+KP_Add move container to workspace $workspace14
-bindsym $mod+Shift+KP_Enter move container to workspace $workspace15
-bindsym $mod+Shift+KP_Decimal move container to workspace $workspace16
+bindcode $mod+Shift+87 move container to workspace "11"
+bindcode $mod+Shift+88 move container to workspace "12"
+bindcode $mod+Shift+89 move container to workspace "13"
+bindcode $mod+Shift+83 move container to workspace "14"
+bindcode $mod+Shift+84 move container to workspace "15"
+bindcode $mod+Shift+85 move container to workspace "16"
+bindcode $mod+Shift+79 move container to workspace "17"
+bindcode $mod+Shift+80 move container to workspace "18"
+bindcode $mod+Shift+81 move container to workspace "19"
+bindcode $mod+Shift+90 move container to workspace "20"
 
 assign [class="^Firefox$"] $workspace1
-assign [class="^Gajim$"] $workspace2
+assign [class="^Pidgin$"] $workspace2
 assign [class="^Thunderbird$"] $workspace3
 assign [class="^Thunar$"] $workspace4
-# assign [class="^URxvt$"] $workspace0
+
+bindsym $mod+grave exec i3-input -F 'workspace %s' -P 'goto workspace: '
+bindsym $mod+Shift+grave exec i3-input -F 'move container to workspace %s' -P 'move to workspace: '
 
 ##################################
 # screens
@@ -312,15 +329,95 @@ bindsym $mod+m mode "move" focus floating
 
 mode "launch" {
     bindsym f mode "default" exec firefox
-    bindsym i mode "default" exec gajim
+    bindsym i mode "default" exec pidgin
     bindsym t mode "default" exec thunderbird
     bindsym n mode "default" exec thunar
-    bindsym t mode "default" exec urxvt
+    bindsym t mode "default" exec termite
     bindsym v mode "default" exec virt-manager
     bindsym m mode "default" exec clerk
-    bindsym s mode "default" exec urxvt -title 'scratchpad' -e 'ipython'
+    bindsym s mode "default" exec termite -t 'scratchpad' -e 'ipython'
 
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
 bindsym $mod+p mode "launch"
+
+mode "escaped" {
+                bindsym Return mode "default"
+                bindsym Escape mode "default"
+}
+bindsym $mod+Escape mode "escaped"
+
+mode "goto" {
+                bindsym f mode "default" [class="(?i)firefox"] focus
+                bindsym i mode "default" [class="(?i)pidgin"] focus
+                bindsym t mode "default" [class="(?i)thunderbird"] focus
+                bindsym n mode "default" [class="(?i)thunar"] focus
+
+                bindsym a mode "default" exec i3-input -F 'mark %s' -P 'Mark name: '
+                bindsym g mode "default" exec i3-input -F '[con_mark=%s] focus' -P 'Go to mark: '
+
+                bindsym Shift+1 mode "default" mark mark1
+                bindsym Shift+2 mode "default" mark mark2
+                bindsym Shift+3 mode "default" mark mark3
+                bindsym Shift+4 mode "default" mark mark4
+                bindsym Shift+5 mode "default" mark mark5
+                bindsym Shift+6 mode "default" mark mark6
+                bindsym Shift+7 mode "default" mark mark7
+                bindsym Shift+8 mode "default" mark mark8
+                bindsym Shift+9 mode "default" mark mark9
+                bindsym Shift+0 mode "default" mark mark0
+                bindsym Shift+KP_1 mode "default" mark mark1
+                bindsym Shift+KP_2 mode "default" mark mark2
+                bindsym Shift+KP_3 mode "default" mark mark3
+                bindsym Shift+KP_4 mode "default" mark mark4
+                bindsym Shift+KP_5 mode "default" mark mark5
+                bindsym Shift+KP_6 mode "default" mark mark6
+                bindsym Shift+KP_7 mode "default" mark mark7
+                bindsym Shift+KP_8 mode "default" mark mark8
+                bindsym Shift+KP_9 mode "default" mark mark9
+                bindsym Shift+KP_0 mode "default" mark mark0
+
+                bindsym 1 [con_mark="mark1"] mode "default" focus
+                bindsym 2 [con_mark="mark2"] mode "default" focus
+                bindsym 3 [con_mark="mark3"] mode "default" focus
+                bindsym 4 [con_mark="mark4"] mode "default" focus
+                bindsym 5 [con_mark="mark5"] mode "default" focus
+                bindsym 6 [con_mark="mark6"] mode "default" focus
+                bindsym 7 [con_mark="mark7"] mode "default" focus
+                bindsym 8 [con_mark="mark8"] mode "default" focus
+                bindsym 9 [con_mark="mark9"] mode "default" focus
+                bindsym 0 [con_mark="mark0"] mode "default" focus
+                bindsym KP_1 [con_mark="mark1"] mode "default" focus
+                bindsym KP_2 [con_mark="mark2"] mode "default" focus
+                bindsym KP_3 [con_mark="mark3"] mode "default" focus
+                bindsym KP_4 [con_mark="mark4"] mode "default" focus
+                bindsym KP_5 [con_mark="mark5"] mode "default" focus
+                bindsym KP_6 [con_mark="mark6"] mode "default" focus
+                bindsym KP_7 [con_mark="mark7"] mode "default" focus
+                bindsym KP_8 [con_mark="mark8"] mode "default" focus
+                bindsym KP_9 [con_mark="mark9"] mode "default" focus
+                bindsym KP_0 [con_mark="mark0"] mode "default" focus
+
+                bindsym Return mode "default"
+                bindsym Escape mode "default"
+}
+bindsym $mod+g mode "goto"
+
+mode "workspace" {
+    bindsym h workspace prev_on_output
+    bindsym j workspace prev
+    bindsym k workspace next
+    bindsym l workspace next_on_output
+
+    bindsym Tab layout toggle all
+
+    bindsym r exec i3-input -F 'rename workspace to "%s"' -P 'New name: '
+
+    bindsym comma move workspace to output left
+    bindsym period move workspace to output right
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+backslash mode "workspace"
