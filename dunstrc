@@ -155,7 +155,7 @@
 
 [frame]
     width = 3
-    color = "#b16286"
+    color = "#98971a"
 
 [shortcuts]
     close = mod4+n
