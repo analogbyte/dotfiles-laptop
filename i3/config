@@ -78,15 +78,14 @@ bindsym XF86Calculator scratchpad show
 
 exec --no-startup-id termite -t 'scratchpad' -e 'ipython'
 for_window [title="^scratchpad$"] move scratchpad
+for_window [class="Pdfpc" window_role="presentation"] move to output left
+for_window [class="Pdfpc" window_role="presenter"] move to output eDP1
 
 ##################################
 # execution
 
 #exec --no-startup-id xautolock -time 20 -locker ~/scripts/lock.sh
 
-exec --no-startup-id 'xrdb -merge ~/.Xresources' # TODO: put in xinitrc?
-exec --no-startup-id 'setxkbmap -option compose:caps -variant altgr-intl us' # TODO, that too?
-exec --no-startup-id '~/scripts/toggle_touchpad.sh'
 exec --no-startup-id 'dunst'
 exec --no-startup-id 'nm-applet'
 
@@ -97,6 +96,7 @@ bindsym $mod+Shift+r restart
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
 bindsym $mod+Return exec termite
+bindsym $mod+Shift+Return exec termite -e "zsh -c 'i3-msg border none && htop'"
 
 bindsym $mod+d exec --no-startup-id "rofi -modi run,window -show run"
 bindsym XF86Search exec --no-startup-id "rofi -modi window,run -show window"
@@ -197,10 +197,10 @@ set $workspace2 "2: im"
 set $workspace3 "3: mail"
 set $workspace4 "4: file"
 set $workspace5 "5: remote"
-set $workspace6 "6: shell"
+set $workspace6 "6: work"
 set $workspace7 "7: misc"
-set $workspace8 "8: misc"
-set $workspace9 "9: misc"
+set $workspace8 "8: shell"
+set $workspace9 "9: shell"
 set $workspace0 "10: shell"
 
 workspace $workspace1 output eDP1
@@ -267,7 +267,7 @@ bindcode $mod+Shift+81 move container to workspace "19"
 bindcode $mod+Shift+90 move container to workspace "20"
 
 assign [class="^Firefox$"] $workspace1
-assign [class="^Pidgin$"] $workspace2
+assign [class="^Gajim$"] $workspace2
 assign [class="^Thunderbird$"] $workspace3
 assign [class="^Thunar$"] $workspace4
 
@@ -329,7 +329,7 @@ bindsym $mod+m mode "move" focus floating
 
 mode "launch" {
     bindsym f mode "default" exec firefox
-    bindsym i mode "default" exec pidgin
+    bindsym i mode "default" exec gajim
     bindsym t mode "default" exec thunderbird
     bindsym n mode "default" exec thunar
     bindsym t mode "default" exec termite
@@ -350,7 +350,7 @@ bindsym $mod+Escape mode "escaped"
 
 mode "goto" {
                 bindsym f mode "default" [class="(?i)firefox"] focus
-                bindsym i mode "default" [class="(?i)pidgin"] focus
+                bindsym i mode "default" [class="(?i)gajim"] focus
                 bindsym t mode "default" [class="(?i)thunderbird"] focus
                 bindsym n mode "default" [class="(?i)thunar"] focus
 
