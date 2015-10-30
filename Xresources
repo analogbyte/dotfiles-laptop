@@ -35,7 +35,7 @@ rofi.bw: 0
 rofi.lines: 20
 rofi.terminal: termite
 rofi.ssh-client: ssh
-rofi.ssh-command: {terminal} -e "{ssh-client} {host}"
+rofi.ssh-command: {terminal} -e "zsh -c 'TERM=xterm-256color {ssh-client} {host} && exit'"
 rofi.fg: #ebdbb2
 rofi.bg: #1d2021
 rofi.hlbg-active: #458588
